@@ -1,13 +1,13 @@
 ##################
 
+silent() { "$@" >/dev/null 2>&1; }
+
 echo "Installing Dependencies"
-apt-get install -y curl
-apt-get install -y sudo
-apt-get install -y mc
+silent apt-get install -y curl sudo mc
 echo "Installed Dependencies"
 
 echo "Installing MariaDB"
-apt-get install -y mariadb-server
+silent apt-get install -y mariadb-server
 sed -i 's/^# *\(port *=.*\)/\1/' /etc/mysql/my.cnf
 sed -i 's/^bind-address/#bind-address/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 echo "Installed MariaDB"
@@ -15,7 +15,7 @@ echo "Installed MariaDB"
 read -r -p "Would you like to add PhpMyAdmin? <y/N> " prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
   echo "Installing phpMyAdmin"
-  apt-get install -y \
+  silent apt-get install -y \
     apache2 \
     php \
     php-mysqli \
@@ -38,8 +38,8 @@ if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 fi
 
 echo "Cleaning up"
-apt-get -y autoremove
-apt-get -y autoclean
+silent apt-get -y autoremove
+silent apt-get -y autoclean
 echo "Cleaned"
 
 ###############################
